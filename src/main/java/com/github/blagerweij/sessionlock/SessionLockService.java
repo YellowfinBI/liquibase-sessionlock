@@ -52,6 +52,7 @@ public abstract class SessionLockService extends StandardLockService {
     return false;
   }
 
+  /* Set Java Property liquibase.sessionlock.disable=true to disable Session Locks and revert to standard locking */
   public boolean isSessionLockingDisabled() {
 	  boolean sessionLockingDisabled = Boolean.parseBoolean(System.getProperty("liquibase.sessionlock.disable"));
 	  if (sessionLockingDisabled) getLog(getClass()).info("Session locking has been explicitly disabled with liquibase.sessionlock.disable");
