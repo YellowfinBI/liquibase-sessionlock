@@ -24,9 +24,8 @@ import liquibase.lockservice.DatabaseChangeLogLock;
  *
  * <p>See {@link MySQLLockService} for a very similar implementation.
  *
- * @see "<a
- *     href='https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_LOCK.html'>
- *     <code>DBMS_LOCK</code> Package</a> (Oracle PL/SQL Reference Manual)"
+ * @see <a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_LOCK.html"
+ *    ><code>DBMS_LOCK</code> Package</a> <i>(Oracle PL/SQL Reference Manual)</i>
  */
 public class OracleLockService extends SessionLockService {
 
@@ -35,7 +34,7 @@ public class OracleLockService extends SessionLockService {
   static final String SQL_RELEASE_LOCK = "{ ? = call dbms_lock.release(?) }";
   static final String SQL_LOCK_INFO =
       "select l.sid, current_timestamp - numToDSInterval(l.ctime,'second'), s.USERNAME, s.OSUSER,"
-          + " s.MACHINE from v$lock l join v$session s on l.sid = s.SID where l.type = 'UL'   and"
+          + " s.MACHINE from gv$lock l join gv$session s on l.sid = s.SID where l.type = 'UL'   and"
           + " l.id1 = ?";
 
   private static Database lastSuccessfulTest = null;
@@ -72,14 +71,13 @@ public class OracleLockService extends SessionLockService {
   }
 
   private String getChangeLogLockName() {
-    return (database.getDefaultSchemaName() + "." + database.getDatabaseChangeLogLockTableName())
+    return (database.getLiquibaseSchemaName() + "." + database.getDatabaseChangeLogLockTableName())
         .toUpperCase(Locale.ROOT);
   }
 
   /**
-   * @see "<a
-   *     href='https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_LOCK.html#GUID-73F03FA6-04B3-4341-AB4F-8BECCF898D13'>
-   *     <code>DBMS_LOCK.ALLOCATE_UNIQUE</code> Procedure</a> (Oracle PL/SQL Reference Manual)"
+   * @see <a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_LOCK.html#GUID-73F03FA6-04B3-4341-AB4F-8BECCF898D13"
+   *    ><code>DBMS_LOCK.ALLOCATE_UNIQUE</code> Procedure</a> <i>(Oracle PL/SQL Reference Manual)</i>
    */
   private String allocateLock(Connection con) throws SQLException {
     // Allocate lock
@@ -93,9 +91,8 @@ public class OracleLockService extends SessionLockService {
   }
 
   /**
-   * @see "<a
-   *     href='https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_LOCK.html#GUID-CC3AEC00-CBFF-45DD-99C3-C7A312C0213E'>
-   *     <code>DBMS_LOCK.REQUEST</code> Procedure</a> (Oracle PL/SQL Reference Manual)"
+   * @see <a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_LOCK.html#GUID-CC3AEC00-CBFF-45DD-99C3-C7A312C0213E"
+   *    ><code>DBMS_LOCK.REQUEST</code> Procedure</a> <i>(Oracle PL/SQL Reference Manual)</i>
    */
   @Override
   protected boolean acquireLock(Connection con) throws SQLException, LockException {
@@ -129,9 +126,8 @@ public class OracleLockService extends SessionLockService {
   }
 
   /**
-   * @see "<a
-   *     href='https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_LOCK.html#GUID-1007B402-15D3-4447-9FF3-219DF113A47B'>
-   *     <code>DBMS_LOCK.RELEASE</code> Procedure</a> (Oracle PL/SQL Reference Manual)"
+   * @see <a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_LOCK.html#GUID-1007B402-15D3-4447-9FF3-219DF113A47B"
+   *    ><code>DBMS_LOCK.RELEASE</code> Procedure</a> <i>(Oracle PL/SQL Reference Manual)</i>
    */
   @Override
   protected void releaseLock(Connection con) throws SQLException, LockException {
@@ -171,12 +167,10 @@ public class OracleLockService extends SessionLockService {
    * AND LOCKS_ALLOCATED.NAME = 'lockName';
    * </code></pre>
    *
-   * @see "<a
-   *     href='https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/DBMS_LOCK_ALLOCATED.html'>The
-   *     DBMS_LOCK_ALLOCATED Table</a> (Oracle PL/SQL Reference Manual)"
-   * @see "<a
-   *     href='https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/DBA_LOCK.html'>The
-   *     DBA_LOCK View</a> (Oracle PL/SQL Reference Manual)"
+   * @see <a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/DBMS_LOCK_ALLOCATED.html"
+   *    >The DBMS_LOCK_ALLOCATED Table</a> <i>(Oracle PL/SQL Reference Manual)</i>
+   * @see <a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/DBA_LOCK.html"
+   *    >The DBA_LOCK View</a> <i>(Oracle PL/SQL Reference Manual)</i>
    */
   @Override
   protected DatabaseChangeLogLock usedLock(Connection con) throws SQLException {
