@@ -158,14 +158,14 @@ public abstract class SessionLockService implements LockService {
   @Override
   public boolean acquireLock() throws LockException {
     if (hasChangeLogLock) {
-      getLog(getClass()).fine("Skipped acquiring of already existing change log lock");
+      getLog(getClass()).fine("Skipped acquiring of already existing session change log lock");
       return true;
     }
 
     try {
       if (acquireLock(getConnection())) {
         hasChangeLogLock = true;
-        getLog(getClass()).info("Successfully acquired change log lock");
+        getLog(getClass()).info("Successfully acquired session change log lock");
         return true;
       }
       return false;
@@ -191,13 +191,13 @@ public abstract class SessionLockService implements LockService {
   @Override
   public void releaseLock() throws LockException {
     if (!hasChangeLogLock) {
-      getLog(getClass()).fine("Skipped releasing of nonexistent change log lock");
+      getLog(getClass()).fine("Skipped releasing of nonexistent change log session lock");
       return;
     }
 
     try {
       releaseLock(getConnection());
-      getLog(getClass()).info("Successfully released change log lock");
+      getLog(getClass()).info("Successfully released change log session lock");
     } catch (SQLException e) {
       throw new LockException(e);
     } finally {

@@ -33,8 +33,8 @@ public class OracleLockService extends SessionLockService {
   static final String SQL_GET_LOCK = "{ ? = call dbms_lock.request(?, ?, ?) }";
   static final String SQL_RELEASE_LOCK = "{ ? = call dbms_lock.release(?) }";
   static final String SQL_LOCK_INFO =
-      "select l.sid, current_timestamp - numToDSInterval(l.ctime,'second'), s.USERNAME, s.OSUSER,"
-          + " s.MACHINE from gv$lock l join gv$session s on l.sid = s.SID where l.type = 'UL'   and"
+      "SELECT l.sid, current_timestamp - numToDSInterval(l.ctime,'second'), s.USERNAME, s.OSUSER,"
+          + " s.MACHINE FROM SYS.V_$LOCK l JOIN SYS.V_$SESSION s ON l.sid = s.SID WHERE l.type = 'UL'   AND"
           + " l.id1 = ?";
 
   private static Database lastSuccessfulTest = null;
