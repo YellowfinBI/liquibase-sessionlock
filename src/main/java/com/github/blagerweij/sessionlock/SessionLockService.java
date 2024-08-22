@@ -158,14 +158,14 @@ public abstract class SessionLockService implements LockService {
   @Override
   public boolean acquireLock() throws LockException {
     if (hasChangeLogLock) {
-      getLog(getClass()).fine("Skipped acquiring of already existing session change log lock");
+      getLog(getClass()).fine("Skipped acquiring of already existing change log session lock");
       return true;
     }
 
     try {
       if (acquireLock(getConnection())) {
         hasChangeLogLock = true;
-        getLog(getClass()).info("Successfully acquired session change log lock");
+        getLog(getClass()).info("Successfully acquired change log session lock");
         return true;
       }
       return false;
